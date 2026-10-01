@@ -1,7 +1,6 @@
-```javascript
-// ==========================================
-// MENU PARA CELULAR
-// ==========================================
+// ===============================
+// MENU MOBILE
+// ===============================
 
 const menuButton = document.getElementById("menuButton");
 const navLinks = document.getElementById("navLinks");
@@ -12,28 +11,32 @@ if (menuButton && navLinks) {
     });
 }
 
-
-// Fecha o menu quando clicar em um link
-
 const links = document.querySelectorAll(".nav-links a");
 
 links.forEach(function (link) {
     link.addEventListener("click", function () {
-        navLinks.classList.remove("active");
+        if (navLinks) {
+            navLinks.classList.remove("active");
+        }
     });
 });
 
 
-// ==========================================
-// TEMA CLARO / ESCURO
-// ==========================================
+// ===============================
+// MODO ESCURO
+// ===============================
 
 const themeButton = document.getElementById("themeButton");
 
 if (themeButton) {
 
-    // Verifica se o usuário já escolheu um tema
-    const temaSalvo = localStorage.getItem("tema");
+    let temaSalvo = null;
+
+    try {
+        temaSalvo = localStorage.getItem("tema");
+    } catch (erro) {
+        temaSalvo = null;
+    }
 
     if (temaSalvo === "escuro") {
         document.body.classList.add("dark");
@@ -42,36 +45,36 @@ if (themeButton) {
         themeButton.textContent = "🌙";
     }
 
-
     themeButton.addEventListener("click", function () {
 
         document.body.classList.toggle("dark");
 
-        if (document.body.classList.contains("dark")) {
+        const modoEscuro =
+            document.body.classList.contains("dark");
 
-            themeButton.textContent = "☀️";
+        themeButton.textContent =
+            modoEscuro ? "☀️" : "🌙";
 
-            localStorage.setItem("tema", "escuro");
-
-        } else {
-
-            themeButton.textContent = "🌙";
-
-            localStorage.setItem("tema", "claro");
+        try {
+            localStorage.setItem(
+                "tema",
+                modoEscuro ? "escuro" : "claro"
+            );
+        } catch (erro) {
+            // Continua funcionando mesmo se o navegador bloquear o armazenamento.
         }
 
     });
 }
 
 
-// ==========================================
-// ANIMAÇÃO DOS CARDS
-// ==========================================
+// ===============================
+// ANIMAÇÕES AO ROLAR A PÁGINA
+// ===============================
 
 const elementosAnimados = document.querySelectorAll(
-    ".info-card, .participation-item, .number-card"
+    ".info-card, .participation-item, .number-card, .reason-item, .check-card, .right-card, .guide-step"
 );
-
 
 function mostrarElementos() {
 
@@ -80,429 +83,324 @@ function mostrarElementos() {
         const posicao =
             elemento.getBoundingClientRect().top;
 
-        const alturaTela =
-            window.innerHeight;
+        const alturaTela = window.innerHeight;
 
         if (posicao < alturaTela - 80) {
             elemento.classList.add("show");
         }
 
     });
-
 }
 
-
-// Executa quando a página é rolada
 window.addEventListener("scroll", mostrarElementos);
 
-
-// Executa uma vez quando a página abre
 mostrarElementos();
 
 
-// ==========================================
+// ===============================
 // QUIZ
-// ==========================================
+// ===============================
 
 const perguntas = [
 
     {
-        pergunta:
-            "Qual atitude ajuda na formação de uma opinião consciente?",
-
+        pergunta: "Qual atitude ajuda na formação de uma opinião consciente?",
         respostas: [
-            "Compartilhar informações sem verificar.",
+            "Compartilhar qualquer informação recebida.",
             "Comparar informações de fontes diferentes.",
-            "Acreditar automaticamente em qualquer postagem."
+            "Considerar apenas opiniões com as quais já concordamos.",
+            "Ignorar informações diferentes."
         ],
-
         correta: 1
     },
 
     {
-        pergunta:
-            "Qual destas pode ser uma forma de participação cidadã?",
-
+        pergunta: "Qual destas pode ser uma forma de participação cidadã?",
         respostas: [
             "Participar de um projeto comunitário.",
-            "Ignorar todos os problemas da comunidade.",
-            "Evitar conhecer assuntos públicos."
+            "Evitar qualquer discussão sobre a comunidade.",
+            "Compartilhar informações sem verificar.",
+            "Impedir opiniões diferentes."
         ],
-
         correta: 0
     },
 
     {
-        pergunta:
-            "Por que é importante conhecer diferentes pontos de vista?",
-
+        pergunta: "Por que é importante conhecer diferentes pontos de vista?",
         respostas: [
             "Para obrigar outras pessoas a concordarem.",
-            "Para evitar qualquer conversa.",
-            "Para compreender melhor diferentes argumentos."
+            "Para descobrir qual opinião todos devem ter.",
+            "Para compreender melhor diferentes argumentos.",
+            "Para evitar qualquer debate."
         ],
-
         correta: 2
     },
 
     {
-        pergunta:
-            "No Brasil, o voto para jovens de 16 e 17 anos é:",
-
+        pergunta: "No Brasil, o voto para jovens de 16 e 17 anos é:",
         respostas: [
             "Facultativo.",
-            "Sempre obrigatório.",
-            "Proibido."
+            "Obrigatório.",
+            "Permitido apenas em eleições municipais.",
+            "Permitido somente aos 17 anos."
         ],
-
         correta: 0
     },
 
     {
-        pergunta:
-            "Antes de compartilhar uma notícia, é recomendável:",
-
+        pergunta: "Antes de compartilhar uma notícia, é recomendável:",
         respostas: [
             "Compartilhar rapidamente.",
             "Verificar a fonte e outras informações.",
-            "Acreditar apenas no título."
+            "Confiar somente no título.",
+            "Considerar verdadeira se muitas pessoas compartilharam."
         ],
+        correta: 1
+    },
 
+    {
+        pergunta: "Qual é uma característica importante do diálogo democrático?",
+        respostas: [
+            "Ouvir e respeitar pessoas com opiniões diferentes.",
+            "Impedir opiniões contrárias.",
+            "Evitar argumentos diferentes.",
+            "Fazer todos concordarem."
+        ],
+        correta: 0
+    },
+
+    {
+        pergunta: "A participação política acontece somente durante as eleições?",
+        respostas: [
+            "Sim, somente pelo voto.",
+            "Sim, porque outras atividades não são participação.",
+            "Não. Existem diferentes formas de participação cidadã.",
+            "Somente para pessoas filiadas a partidos."
+        ],
+        correta: 2
+    },
+
+    {
+        pergunta: "Qual atitude pode ajudar a identificar uma informação duvidosa?",
+        respostas: [
+            "Verificar a fonte, a data e comparar com outras fontes.",
+            "Acreditar porque alguém conhecido enviou.",
+            "Considerar verdadeira porque possui uma imagem.",
+            "Compartilhar antes de verificar."
+        ],
+        correta: 0
+    },
+
+    {
+        pergunta: "Participar de um grêmio estudantil pode ser considerado:",
+        respostas: [
+            "Uma forma de participação no ambiente escolar.",
+            "Uma atividade exclusivamente eleitoral.",
+            "Uma atividade que não envolve cidadania.",
+            "Uma forma de impedir outros estudantes de participar."
+        ],
+        correta: 0
+    },
+
+    {
+        pergunta: "A partir de qual idade uma pessoa pode solicitar o título eleitoral no Brasil?",
+        respostas: [
+            "14 anos.",
+            "15 anos.",
+            "16 anos.",
+            "18 anos."
+        ],
         correta: 1
     }
 
 ];
 
 
-// ==========================================
-// ELEMENTOS DO QUIZ
-// ==========================================
-
-const question = document.getElementById("question");
-const answers = document.getElementById("answers");
-const nextButton = document.getElementById("nextButton");
-const questionNumber = document.getElementById("questionNumber");
-const progressBar = document.getElementById("progressBar");
-const quizResult = document.getElementById("quizResult");
-
-
-// Variáveis do jogo
-
 let perguntaAtual = 0;
 let pontuacao = 0;
 let respondeu = false;
 
 
-// ==========================================
-// MOSTRAR PERGUNTA
-// ==========================================
+const questionNumber =
+    document.getElementById("questionNumber");
+
+const question =
+    document.getElementById("question");
+
+const answers =
+    document.getElementById("answers");
+
+const nextButton =
+    document.getElementById("nextButton");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const quizResult =
+    document.getElementById("quizResult");
+
 
 function mostrarPergunta() {
 
-    // Verifica se os elementos existem
+    respondeu = false;
+
     if (
+        !questionNumber ||
         !question ||
         !answers ||
         !nextButton ||
-        !questionNumber ||
         !progressBar
     ) {
         return;
     }
 
-
-    respondeu = false;
-
-
-    const pergunta =
-        perguntas[perguntaAtual];
-
-
-    // Texto da pergunta
-
-    question.textContent =
-        pergunta.pergunta;
-
-
-    // Número da pergunta
+    const atual = perguntas[perguntaAtual];
 
     questionNumber.textContent =
-        "Pergunta " +
-        (perguntaAtual + 1) +
-        " de " +
-        perguntas.length;
+        `Pergunta ${perguntaAtual + 1} de ${perguntas.length}`;
 
-
-    // Barra de progresso
-
-    const progresso =
-        ((perguntaAtual + 1) / perguntas.length) * 100;
-
-    progressBar.style.width =
-        progresso + "%";
-
-
-    // Limpa respostas antigas
+    question.textContent =
+        atual.pergunta;
 
     answers.innerHTML = "";
 
-
-    // Esconde botão até responder
+    progressBar.style.width =
+        `${((perguntaAtual) / perguntas.length) * 100}%`;
 
     nextButton.style.display = "none";
 
+    atual.respostas.forEach(function (resposta, indice) {
 
-    // Cria os botões das respostas
+        const button =
+            document.createElement("button");
 
-    pergunta.respostas.forEach(
-        function (resposta, indice) {
+        button.className = "answer-button";
 
-            const botao =
-                document.createElement("button");
+        button.textContent = resposta;
 
+        button.addEventListener("click", function () {
 
-            botao.textContent =
-                resposta;
+            verificarResposta(indice, button);
 
+        });
 
-            botao.className =
-                "answer-button";
+        answers.appendChild(button);
 
-
-            botao.type =
-                "button";
-
-
-            botao.addEventListener(
-                "click",
-                function () {
-
-                    verificarResposta(
-                        indice,
-                        botao
-                    );
-
-                }
-            );
-
-
-            answers.appendChild(botao);
-
-        }
-    );
-
+    });
 }
 
 
-// ==========================================
-// VERIFICAR RESPOSTA
-// ==========================================
-
-function verificarResposta(
-    indice,
-    botaoEscolhido
-) {
-
-    // Impede clicar várias vezes
+function verificarResposta(indiceEscolhido, botao) {
 
     if (respondeu) {
         return;
     }
 
-
     respondeu = true;
 
-
-    const respostaCorreta =
-        perguntas[perguntaAtual].correta;
-
+    const atual = perguntas[perguntaAtual];
 
     const botoes =
-        document.querySelectorAll(
-            ".answer-button"
-        );
+        document.querySelectorAll(".answer-button");
 
+    botoes.forEach(function (botaoResposta, indice) {
 
-    // Mostra qual era a resposta correta
+        botaoResposta.disabled = true;
 
-    botoes.forEach(
-        function (botao, indiceBotao) {
-
-            if (
-                indiceBotao === respostaCorreta
-            ) {
-
-                botao.classList.add(
-                    "correct"
-                );
-
-            }
-
+        if (indice === atual.correta) {
+            botaoResposta.classList.add("correct");
         }
-    );
+
+    });
 
 
-    // Verifica se o usuário acertou
-
-    if (indice === respostaCorreta) {
+    if (indiceEscolhido === atual.correta) {
 
         pontuacao++;
 
     } else {
 
-        botaoEscolhido.classList.add(
-            "wrong"
-        );
+        botao.classList.add("wrong");
 
     }
 
 
-    // Mostra botão para continuar
-
-    nextButton.style.display =
-        "inline-block";
-
-
-    // Última pergunta
-
-    if (
-        perguntaAtual ===
-        perguntas.length - 1
-    ) {
-
-        nextButton.textContent =
-            "Ver resultado";
-
-    } else {
-
-        nextButton.textContent =
-            "Próxima pergunta →";
-
+    if (nextButton) {
+        nextButton.style.display = "inline-block";
     }
-
 }
 
-
-// ==========================================
-// BOTÃO PRÓXIMA PERGUNTA
-// ==========================================
-
-if (nextButton) {
-
-    nextButton.addEventListener(
-        "click",
-        function () {
-
-            perguntaAtual++;
-
-
-            if (
-                perguntaAtual <
-                perguntas.length
-            ) {
-
-                mostrarPergunta();
-
-            } else {
-
-                mostrarResultado();
-
-            }
-
-        }
-    );
-
-}
-
-
-// ==========================================
-// MOSTRAR RESULTADO
-// ==========================================
 
 function mostrarResultado() {
 
-    question.style.display =
-        "none";
+    if (!question || !answers || !nextButton || !quizResult) {
+        return;
+    }
 
-    answers.style.display =
-        "none";
+    question.textContent =
+        "Quiz concluído!";
 
-    nextButton.style.display =
-        "none";
-
+    answers.innerHTML = "";
 
     questionNumber.textContent =
-        "Resultado final";
+        "Resultado";
 
+    progressBar.style.width = "100%";
 
-    progressBar.style.width =
-        "100%";
+    nextButton.style.display = "none";
 
 
     let mensagem = "";
 
-
-    if (pontuacao === 5) {
+    if (pontuacao === perguntas.length) {
 
         mensagem =
-            "🌟 Excelente! Você acertou todas as perguntas!";
+            `🌟 Excelente! Você acertou todas as ${perguntas.length} perguntas!`;
+
+    } else if (pontuacao >= 7) {
+
+        mensagem =
+            `👏 Muito bem! Você acertou ${pontuacao} de ${perguntas.length}.`;
+
+    } else if (pontuacao >= 5) {
+
+        mensagem =
+            `📚 Você acertou ${pontuacao} de ${perguntas.length}. Continue aprendendo!`;
+
+    } else {
+
+        mensagem =
+            `💡 Você acertou ${pontuacao} de ${perguntas.length}. Informação é um ótimo primeiro passo!`;
 
     }
 
-    else if (pontuacao >= 3) {
 
-        mensagem =
-            "👏 Muito bem! Você já conhece bastante sobre participação cidadã.";
+    quizResult.innerHTML = `
+        <p>${mensagem}</p>
 
-    }
+        <button
+            id="restartButton"
+            class="secondary-button"
+            style="margin-top: 20px;"
+        >
+            Refazer o quiz
+        </button>
+    `;
 
-    else {
-
-        mensagem =
-            "💡 Continue aprendendo! Informação é um ótimo primeiro passo.";
-
-    }
-
-
-    quizResult.innerHTML =
-
-        "<h3>" +
-        pontuacao +
-        " de " +
-        perguntas.length +
-        " pontos</h3>" +
-
-        "<p>" +
-        mensagem +
-        "</p>" +
-
-        "<button " +
-        'class="main-button"' +
-        'id="restartButton"' +
-        'type="button">' +
-        "Refazer quiz" +
-        "</button>";
-
-
-    // Botão para reiniciar
 
     const restartButton =
-        document.getElementById(
-            "restartButton"
+        document.getElementById("restartButton");
+
+    if (restartButton) {
+
+        restartButton.addEventListener(
+            "click",
+            reiniciarQuiz
         );
 
-
-    restartButton.addEventListener(
-        "click",
-        reiniciarQuiz
-    );
-
+    }
 }
 
-
-// ==========================================
-// REINICIAR QUIZ
-// ==========================================
 
 function reiniciarQuiz() {
 
@@ -510,23 +408,40 @@ function reiniciarQuiz() {
 
     pontuacao = 0;
 
-    question.style.display =
-        "block";
+    respondeu = false;
 
-    answers.style.display =
-        "grid";
-
-    quizResult.innerHTML = "";
-
+    if (quizResult) {
+        quizResult.innerHTML = "";
+    }
 
     mostrarPergunta();
+}
+
+
+if (nextButton) {
+
+    nextButton.addEventListener("click", function () {
+
+        if (!respondeu) {
+            return;
+        }
+
+        perguntaAtual++;
+
+        if (perguntaAtual < perguntas.length) {
+
+            mostrarPergunta();
+
+        } else {
+
+            mostrarResultado();
+
+        }
+
+    });
 
 }
 
 
-// ==========================================
-// INICIAR O QUIZ
-// ==========================================
-
+// Inicia o quiz
 mostrarPergunta();
-```
